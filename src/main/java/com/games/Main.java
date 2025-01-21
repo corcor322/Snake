@@ -2,8 +2,10 @@ package com.games;
 import javax.swing.*;
 public class Main {
     public static void main(String[] args) {
+
         int boardWidth = 600;
         int boardHeight = boardWidth;
+        int tileSize = 25;
 
         JFrame frame = new JFrame("Snake");
         frame.setVisible(true);
