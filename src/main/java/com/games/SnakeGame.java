@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
 
+
 import static javax.swing.text.StyleConstants.setBackground;
 
-public class SnakeGame extends JPanel{
+public class SnakeGame extends JPanel implements ActionListener{
 
     private class Tile {
         int x;
@@ -29,6 +30,10 @@ public class SnakeGame extends JPanel{
     Tile food;
     Random random;
 
+    //game logic
+
+    Timer gameLoop;
+
     SnakeGame(int boardWidth, int boardHeight) {
         this.boardWidth = boardWidth;
         this.boardHeight = boardHeight;
@@ -42,6 +47,10 @@ public class SnakeGame extends JPanel{
         food = new Tile(10,10);
         random = new Random();
         placeFood();
+
+        //game loop
+        gameLoop = new Timer(100, this);
+        gameLoop.start();
     }
 
     public void paintComponent(Graphics g) {
@@ -63,5 +72,9 @@ public class SnakeGame extends JPanel{
     public void placeFood() {
         food.x = random.nextInt(boardWidth/tileSize); // 600x25 = 24
         food.y = random.nextInt(boardHeight/tileSize);
+    }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        repaint();
     }
 }
