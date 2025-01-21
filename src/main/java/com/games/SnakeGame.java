@@ -25,6 +25,7 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener{
 
     //snake
     Tile snakeHead;
+    ArrayList<Tile> snakeBody;
 
     //food
     Tile food;
@@ -45,6 +46,7 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener{
 
         //snake
         snakeHead = new Tile(5,5);
+        snakeBody = new ArrayList<Tile>();
 
         //food
         food = new Tile(10,10);
@@ -71,16 +73,44 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener{
         g.setColor(Color.white);
         g.fillRect(food.x * tileSize, food.y * tileSize, tileSize, tileSize );
 
-        //snake
+        //snake head
         g.setColor(Color.black);
         g.fillRect(snakeHead.x * tileSize, snakeHead.y * tileSize, tileSize, tileSize);
+        
+        //snake body
+        for (int i = 0; i < snakeBody.size(); i++) {
+            Tile snakePart = snakeBody.get(i);
+            g.fillRect(snakePart.x * tileSize, snakePart.y * tileSize, tileSize, tileSize);
+        }
     }
     public void placeFood() {
         food.x = random.nextInt(boardWidth/tileSize); // 600x25 = 24
         food.y = random.nextInt(boardHeight/tileSize);
     }
+    public boolean collision(Tile tile1, Tile tile2) {
+        return tile1.x == tile2.x && tile1.y == tile2.y;
+    }
 
     public void move() {
+        //eat food
+        if (collision(snakeHead, food)) {
+            snakeBody.add(new Tile(food.x, food.y));
+            placeFood();
+        }
+
+        //snake body
+        for (int i = snakeBody.size()-1; i >= 0; i--) {
+            Tile snakePart = snakeBody.get(i);
+            if (i == 0) {
+                snakePart.x = snakeHead.x;
+                snakePart.y = snakeHead.y;
+            } else {
+                Tile prevSnakePart = snakeBody.get(i-1);
+                snakePart.x = prevSnakePart.x;
+                snakePart.y = prevSnakePart.y;
+            }
+        }
+
         //snake head
         snakeHead.x += velocityX;
         snakeHead.y += velocityY;
